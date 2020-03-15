@@ -10,16 +10,19 @@
     </v-container>
     <v-content>
       <upload></upload>
+      <dog></dog>
     </v-content>
   </v-app>
 </template>
 
 <script>
 import Upload from './components/Upload.vue';
+import Dog from './components/Dog.vue';
 
 export default {
   components: {
     Upload,
+    Dog,
   },
 };
 </script>
