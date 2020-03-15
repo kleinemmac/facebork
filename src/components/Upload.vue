@@ -8,7 +8,7 @@
     <v-row justify="center">
       <v-col class="text-center" cols="12" lg="6">
         <input id="file-upload" type="file" hidden @change="selectFile">
-        <div v-cloak @drop.prevent="dropFile" @dragover.prevent>
+        <div v-if="file === null" v-cloak @drop.prevent="dropFile" @dragover.prevent>
           <div id="drop-area">
             <v-row align="center" class="max-height">
               <v-col>
@@ -24,6 +24,7 @@
             </v-row>
           </div>
         </div>
+        <img v-if="file !== null" :src="url">
       </v-col>
     </v-row>
   </v-container>
@@ -34,6 +35,7 @@ export default {
   data() {
     return {
       file: null,
+      url: '',
     };
   },
   methods: {
@@ -41,11 +43,13 @@ export default {
       const droppedFile = e.dataTransfer.files[0];
       if (!droppedFile) return;
       this.file = droppedFile;
+      this.url = URL.createObjectURL(this.file);
     },
     selectFile(e) {
       const selectedFile = e.target.files[0];
       if (!selectedFile) return;
       this.file = selectedFile;
+      this.url = URL.createObjectURL(this.file);
     },
     chooseFile() {
       document.getElementById('file-upload').click();
