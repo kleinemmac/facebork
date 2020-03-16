@@ -2,10 +2,9 @@
   <v-container fluid>
     <v-dialog v-model="wrongTypeDialog" width="250">
       <v-card>
-        <v-card-title class="headline grey lighten-2" primary-title>Upload Error</v-card-title>
+        <v-card-title class="headline grey lighten-2 justify-center" primary-title>Upload Error</v-card-title>
         <v-card-text class="text-center pt-2">
-          Wrong file type.
-          <br />Please upload an image.
+          Please upload an image less than 2MB in size.
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -43,8 +42,9 @@
       </v-card>
     </v-dialog>
     <v-row>
-      <v-col>
-        <p class="title text-center">{{ instructionText }}</p>
+      <v-col class="text-center">
+        <p class="title">{{ instructionText }}</p>
+        <v-btn outlined @click="resetUpload()" v-if="resetButtonVisible">Again?!</v-btn>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -88,6 +88,7 @@ export default {
       wrongTypeDialog: false,
       notDogDialog: false,
       modelErrorDialog: false,
+      resetButtonVisible: false,
       dogRatings: [
         "17/10, heckin' great pupper!",
         "27/10 shmackos, great pupper!",
@@ -105,12 +106,14 @@ export default {
       } else {
         file = e.target.files[0];
       }
-      if (!file || !file.type.includes("image")) {
+      if (!file || !file.type.includes("image") || file.size > 200000) {
         this.wrongTypeDialog = true;
         return;
       }
+      this.$emit("runDog");
       this.file = file;
       this.url = URL.createObjectURL(this.file);
+      this.instructionText = "Processing...";
       const classifier = ml5.objectDetector("cocossd");
       classifier.then(res => {
         res.detect(document.getElementById("image"), (err, results) => {
@@ -119,19 +122,25 @@ export default {
           });
           if (dogExists.length === 0) {
             this.notDogDialog = true;
-            this.file = null;
+            this.resetUpload();
           } else {
             this.instructionText = this.dogRatings[Math.floor(Math.random() * this.dogRatings.length)];
+            this.resetButtonVisible = true;
           }
         });
       }).catch(err => {
         this.modelErrorDialog = true;
-        this.file = null;
+        this.resetUpload();
       });
 
     },
     chooseFile() {
       document.getElementById("file-upload").click();
+    },
+    resetUpload() {
+      this.file = null;
+      this.resetButtonVisible = false;
+      this.instructionText = "Upload a picture of your dog for a rating.";
     }
   }
 };
@@ -147,4 +156,8 @@ export default {
     color: #9e9e9e;
   }
 }
+ #image {
+    max-width: 100%;
+    height: 40vh;
+  }
 </style>

@@ -9,7 +9,7 @@
       </v-row>
     </v-container>
     <v-content>
-      <upload></upload>
+      <upload @runDog="val => runDog()"></upload>
       <dog></dog>
     </v-content>
   </v-app>
@@ -20,10 +20,37 @@ import Upload from './components/Upload.vue';
 import Dog from './components/Dog.vue';
 
 export default {
+  data() {
+    return {
+    }
+  },
   components: {
     Upload,
     Dog,
   },
+  methods: {
+    runDog() {
+      let dog = document.getElementById("dog");
+      let pos = 0
+      let walk = setInterval(() => {
+        if (pos === window.innerWidth) {
+          pos = -300;
+          let returnWalk = setInterval(() => {
+            if (pos === 0) {
+              clearInterval(returnWalk);
+            } else {
+              pos++;
+              dog.style.left = pos + 'px';
+            }
+          }, 5);
+          clearInterval(walk);
+        } else {
+          pos++;
+          dog.style.left = pos + 'px';
+        }
+      }, 5);
+    }
+  }
 };
 </script>
 

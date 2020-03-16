@@ -68,7 +68,8 @@
 </template>
 
 <script>
-export default {};
+export default {
+};
 </script>
 
 <style lang="scss" scoped>
@@ -94,9 +95,11 @@ export default {};
   z-index: 1;
   height: 300px;
   width: 300px;
+  top: -100px;
   display: flex;
   justify-content: center;
   align-items: center;
+  
 
   * {
     position: absolute;
