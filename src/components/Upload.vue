@@ -59,7 +59,7 @@
           <div id="drop-area">
             <v-row align="center" class="max-height">
               <v-col>
-                <v-btn fab color="green" @click="chooseFile">
+                <v-btn fab color="teal" @click="chooseFile">
                   <v-icon color="white">mdi-dog</v-icon>
                 </v-btn>
                 <p class="pt-4">
@@ -106,11 +106,10 @@ export default {
       } else {
         file = e.target.files[0];
       }
-      if (!file || !file.type.includes("image") || file.size > 200000) {
+      if (!file || !file.type.includes("image") || file.size > 2000000) {
         this.wrongTypeDialog = true;
         return;
       }
-      this.$emit("runDog");
       this.file = file;
       this.url = URL.createObjectURL(this.file);
       this.instructionText = "Processing...";
@@ -121,11 +120,14 @@ export default {
             return item.label === "dog";
           });
           if (dogExists.length === 0) {
+            // Dog not found
             this.notDogDialog = true;
             this.resetUpload();
-          } else {
+          } else {  
+            // Dog successfully found
             this.instructionText = this.dogRatings[Math.floor(Math.random() * this.dogRatings.length)];
             this.resetButtonVisible = true;
+            this.$emit("runDog");
           }
         });
       }).catch(err => {
@@ -152,11 +154,12 @@ export default {
   height: 50vh;
   border: 3px dashed #bdbdbd;
   border-radius: 10px;
+  background-color: #fff;
   p {
     color: #9e9e9e;
   }
 }
- #image {
+#image {
     max-width: 100%;
     height: 40vh;
   }

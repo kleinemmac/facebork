@@ -2,7 +2,7 @@
   <v-app id="facebork">
     <v-container fluid>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" class="text-center text-md-left">
           <h1 class="display-3">Facebork</h1>
           <h2 class="headline">Doin' 'Em a Big Heckin' Rate</h2>
         </v-col>
@@ -10,7 +10,7 @@
     </v-container>
     <v-content>
       <upload @runDog="val => runDog()"></upload>
-      <dog></dog>
+      <dog class="hidden-md-and-down"></dog>
     </v-content>
   </v-app>
 </template>
@@ -57,5 +57,8 @@ export default {
 <style lang="scss">
   .max-height {
     height: 100%;
+  }
+  #facebork {
+    background-color: #E8EAF6;
   }
 </style>
